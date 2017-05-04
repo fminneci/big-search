@@ -7,7 +7,7 @@ import subprocess
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
-VERSION = '0.0.1'
+VERSION = '0.1.0'
 
 #stolen from Guidebook
 PKG_NAME = 'dgbio'
@@ -49,9 +49,11 @@ setup(
     packages=find_packages(),
     data_files=include('bin'),
     install_requires=[
-        'pyvcf',
+        'pysam',
+        'numpy',
     ],
     tests_require=[
+        'virtualenv',
         'tox',
         'pytest',
         'mock',
