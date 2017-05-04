@@ -2,7 +2,7 @@
 Case Study in Python searching datasets larger than RAM.
 
 Please find the detailed documentation for this project in the `docs` folder, 
-specifically [`docs/Report.md`](https://github.com/fminneci/big-search/docs/Report.md).
+specifically [`docs/Report.md`](https://github.com/fminneci/big-search/tree/master/docs).
 
 A brief overview is outlined in the following instructions.
 
