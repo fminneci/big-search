@@ -264,7 +264,8 @@ text, or binary encodings of the text, to do naive on-line searching. I was
 testing these in alternation using Unix `time` on the command line.
 
 Note that `compare_bin15` requires install the module `gmpy2` module, which is 
-not included here.
+not included here. In fact, these algorithms are not meant to be used - they are 
+shown here only for reference purpose.
 
 Algorithms `compare_np5`, `compare_bin8`, `compare_bin15`, `compare_np16` were 
 the fastest naive on-line searching algorithms I obtained (`compare_np16` was 
