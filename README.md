@@ -13,7 +13,8 @@ Clone this repository using:
     git clone https://github.com/fminneci/big-search.git
 
 In the `big-search` directory, install with `python setup.py install --user` or 
-your favourite version of this command.
+your favourite version of this command. As usual, this requires that you have 
+`pip`/`setuptools` installed on you system.
 
 ### Pre-processing and search steps
 
