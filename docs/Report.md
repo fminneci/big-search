@@ -106,7 +106,8 @@ Note that the `match_count` array is defined (l. 104) with data type appropriate
 for 1-byte integers: this means that the pattern cannot be longer than 256 
 characters, which is anyway the case for short genomic "reads".
 
-Each hit in the returned list of 5-tuples contains:  
+Each hit in the returned list of 5-tuples contains:
+
 0. binary flag, either 0 (meaning "found on reference forward strand") or 16 
 ("on reverse strand")
 1. name of the reference contig/chromosome
