@@ -49,11 +49,11 @@ def test_search(pattern, mismatches, exphits_path):
             # headers (sequence id lines are missing).  The easiest
             # workaround is to simply use re instead.
             if not line.startswith('@'):
-                # Note: we also get the sequence, although that is not
+                # Note: we also read the sequence, although that is not
                 # necessary as it is determined uniquely by the second
-                # field (flag field) in a SAM file.
-                exphit_re = r'^\s*\S+\s+(\S+)\s+(\S+)\s+(\S+)\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+(\S+)'
-                expected_hits.append(re.search(exphit_re, line).groups())
+                # field (flag field) in these simple cases.
+                exphitRE = r'^\s*\S+\s+(\S+)\s+(\S+)\s+(\S+)\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+(\S+)'
+                expected_hits.append(re.search(exphitRE, line).groups())
     
     # Check that my solution finds exactly the same hits.
     assert sorted(expected_hits) == sorted(result)

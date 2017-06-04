@@ -145,10 +145,10 @@ def search(pattern, max_mismatches):
     outpath = create_path(path_type='alignments', identifier=pattern)
     outlist = []
     print_string = r'{0:>3} {1:>12} {2:>12} {3:>24} {4:>24}'
-    with open(outpath, 'wb') as outfile:
-        for result in pool.imap(search_chunk_worker, chunknames, 5):
+    with open(outpath, 'wb', 0) as outfile:
+        for result in pool.imap_unordered(search_chunk_worker, chunknames, 5):
             outlist.extend(result)
-            if len(outlist) > 20:
+            if len(outlist) >= 20:
                 outfile.write('\n'.join(print_string.format(*hit) for hit in outlist) + '\n')
                 outlist = []
         if outlist:

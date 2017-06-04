@@ -2,7 +2,7 @@
 Case Study in Python searching datasets larger than RAM.
 
 Please find the detailed documentation for this project in the `docs` folder, 
-specifically [`docs/Report.md`](https://github.com/fminneci/big-search/tree/master/docs/Report.md).
+specifically `docs/Report.md`.
 
 A brief overview is outlined in the following instructions.
 
@@ -12,9 +12,20 @@ Clone this repository using:
 
     git clone https://github.com/fminneci/big-search.git
 
-In the `big-search` directory, install with `python setup.py install --user` or 
-your favourite version of this command. As usual, this requires that you have 
-`pip`/`setuptools` installed on you system.
+In the `big-search` directory, install with: 
+
+    python setup.py install --user
+
+...or with your favourite version of this command. As usual, this requires that 
+you have `pip`/`setuptools` installed on you system.
+
+Note that this solution uses Python's `pysam` module, as suggested. The module 
+is installed automatically by the command above, however this requires zlib / 
+libbzip2 / liblzma development files (they are used to install HTSlib within 
+`pysam`). If needed, they can be obtained before running the above installation, 
+for example with:
+* `apt-get install zlib1g-dev libbz2-dev liblzma-dev`   (on Debian/Ubuntu Linux)
+* `yum install zlib-devel bzip2-devel xz-devel`   (on RPM-based Linux or CygWin)
 
 ### Pre-processing and search steps
 
@@ -55,14 +66,26 @@ memory per process).
 ### Tests
 
 After that, you can test that the search step of my solution passes all test as 
-required (2 sample files provided), running:
+required (2 sample files provided).
+
+Note that due to bad interaction with tox/pytest, one of their requirements (the 
+`virtualenv` module) cannot be specified simply using the "tests_require" section 
+of the `setup.py` file - it needs to be installed in advance. This can be achieved 
+by running:
+
+    pip install --user -r requirements.txt
+
+...which also installs `pylint`.
+
+Having done that, the tests can be performed by running:
 
     python setup.py test -a "-e py27"
 
 This command will run tox/pytest (as usual, they will automatically install any 
 missing necessary packages locally) and perform both tests, returning two 
 passes.  
-The tests will always include re-running the search step.
+
+All tests will always include re-running the search step.
 
 ### Profiling
 

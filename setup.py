@@ -40,9 +40,9 @@ class Tox(TestCommand):
 setup(
     name='big-search',
     version=VERSION,
-    url='https://github.com/DeskGen/big-search',
-    author='YOUR NAME',
-    author_email='YOUR EMAIL',
+    url='https://github.com/fminneci/big-search',
+    author='Federico Minneci',
+    author_email='f.minneci@ucl.ac.uk',
     maintainer='',
     maintainer_email='',
     description='Case Study in Python searching datasets larger than RAM.',
@@ -53,7 +53,6 @@ setup(
         'numpy',
     ],
     tests_require=[
-        'virtualenv',
         'tox',
         'pytest',
         'mock',

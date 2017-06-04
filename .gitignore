@@ -2,6 +2,9 @@
 tests/data/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 ref_index/
 
+# Output files
+alignments_*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

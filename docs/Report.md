@@ -6,7 +6,7 @@
 
 The next three sections describe my solution to the big-search case study in 
 detail.  
-The first one describes the solution itself, contained in the dictionarysearch 
+The first one describes the solution itself, contained in the `dictionarysearch` 
 Python module; the following section describes tests and profiling steps taken; 
 the third section summarises the conclusions.
 
@@ -55,9 +55,10 @@ indeed, what we use at the "binary search" step in the outlined Example Strategy
 pattern's characters at a time. For this reason, we can avoid saving suffix 
 arrays, which are complicated to prepare, and simply save a dictionary that 
 associates each character in the reference's alphabet to a list of positions 
-where that character occurs. At the search stage, we won't even need to do the 
-binary search: simply, for each position where the reference has the same 
-character as the pattern character we are looking up (we get this information 
+where that character occurs (basically, saving only the 1-character postings 
+lists mentioned in Example Strategy 1). At the search stage, we won't even need 
+to do the binary search: simply, for each position where the reference has the 
+same character as the pattern character we are looking up (we get this information 
 from the saved index dictionary) we increment the number of matches for that 
 location. Finally, we look for location on the reference where the total number 
 of matches is sufficient.
@@ -98,17 +99,18 @@ appropriate number of matches (l. 111-112), and returns a 5-tuple for each match
 I'd like to acknowledge the fact that the idea of using a numpy array of keeping 
 track of the number of matches/mismatches, rather than a list of tuples or slower 
 structures, was already used in another solution by user "chingtoe365". However, 
-incrementing the matching positions improves the speed significantly.
+incrementing only the matching positions, rather than the mis-matching positions, 
+improves the speed significantly.
 
 Note that the `match_count` array is defined (l. 104) with data type appropriate 
 for 1-byte integers: this means that the pattern cannot be longer than 256 
 characters, which is anyway the case for short genomic "reads".
 
-Each hit in the returned list of 5-tuples contains:
+Each hit in the returned list of 5-tuples contains:  
 0. binary flag, either 0 (meaning "found on reference forward strand") or 16 
 ("on reverse strand")
 1. name of the reference contig/chromosome
-2. position of start of match on the reference
+2. 1-based position of start of match on the reference
 3. pattern sequence (either original or reverse complement)
 4. corresponding sequence on the reference
 
@@ -118,10 +120,10 @@ genomics alignment files in SAM format), which have several defined features:
 * both the pattern sequence, and a flag to indicate forward/reverse strand, are 
 reported
 
-Also, the reference sequence is reported, as this is how I interpreted one of 
-the Guidelines (number 6) in the `ASSIGNMENT.md` file.
+Moreover, the reference sequence is reported in my solution because this is how 
+I interpreted one of the Guidelines (number 6) in the `ASSIGNMENT.md` file.
 
-Finally, note that the Pool's instance "imap" method would itself write 
+Finally, note that the Pool instance's `imap_unordered` method would itself write 
 solutions to file as it receives them from the workers, therefore proving 
 automatically a sort of buffer mechanisms - however, I implemented a proper 
 buffer on top of that (l. 145-155).
@@ -136,7 +138,8 @@ All benchmarking has been done using two tools:
 * saving output of Unix `top` utility, for monitoring memory usage
 
 The benchmarking was performed on a machine with HDD disk, DDR3 memory, Intel i7 
-quad-core (max 8 threads) with processor speed 3.4 GHz.
+quad-core (max 8 threads) with processor speed 3.4 GHz, running a Linux OS 
+(Ubuntu 16.04).
 
 For the test suite, it is easy to run it as indicated in the README file, 
 obtaining a full pass outcome (both sample cases).
@@ -153,27 +156,29 @@ One important caveat is that when running the search with multiprocessing the
 first time, processes were not used optimally and the search time was higher 
 than later searches. I have not been able to investigate this properly, but the 
 benchmarking is done on the later searches, as the initial slower run was badly 
-reproducible - anyway roughly, it slowed down the search by a factor of 2X, and 
-the culprit seemed to be slower index loading times.
+reproducible (it slowed down the search by a variable factor, and the culprit 
+seemed to be slower index loading times).
 
-The detailed profiling data indicate that:
+The detailed profiling data mentioned above indicate that:
 * the pre-processing step (1 process, 500 MB memory, 26 minutes, 7 GB output 
 index folder) had two time consuming steps, creating the arrays (27% time) and 
-saving them to disk (70% time), with all other steps (loading, splitting, saving 
-the sequence files) adding up to 3% of the time
+serialising/compressing/saving them to disk (70% time), with all other steps 
+(initialising the arrays and counting the occurrences of different characters, 
+loading, splitting, and saving the sequence files) adding up to 3% of the time
 * the search step (8 processes, 60 GB memory per process, 68 seconds) had two 
 time consuming steps, loading the arrays and sequences (31% time) and searching 
 (63% time), while all other steps (initialising variables and local arrays, 
 collecting results, printing them to file) added up to 6% of the time - in 
-particular, the differnce when varying the output buffer size on line 151 was 
+particular, the difference when varying the output buffer size on line 151 was 
 negligible due to very small size of the output list
 
-The sizable delay due to saving or loading the arrays might be heavily reduced 
+The sizable delay due to saving or loading the arrays might be reduced 
 using a faster disk type (SSD), but I could not test that.
 
 Note that the size of pre-processed reference chunks can be varied. After 
 testing several sizes, I settled for one that gave low memory usage on 8 
-processes as well as number of files in the reference index smaller than 1000.
+processes as well as number of files in the reference index (npz files) smaller 
+than 1000.
 
 I also carried out further exploration, as follows.
 
@@ -203,7 +208,7 @@ while time varied as follows:
 
 There is no real dependence on _k_, while times increase linearly with len(_P_).
 
-This is expected, as the search step (lines) is clearly of time complexity 
+This is expected, as the search step (lines 105-106) is clearly of time complexity 
 O(len(_P_)), while it does not depend on _k_, which is only a threshold.
 
 ### Conclusions
@@ -220,7 +225,7 @@ In summary, I found that my solution has the following strong points:
 * it was the fastest in my tests
 
 However, running time is much slower than production levels of less than 1 
-second. This is hopefully compensated by a very compact (one module with 
+second. This is hopefully compensated by a very compact solution (one module with 
 everything in it, 177 lines of code including many for comments or auxiliary 
 functions).
 
