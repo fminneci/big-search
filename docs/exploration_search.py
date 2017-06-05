@@ -99,9 +99,6 @@ if __name__ == '__main__':
     
     num_mismatches = 3
     
-    mylong_bin = [code[val] for val in mylong]
-    myshort_bin = [code[val] for val in myshort]
-    
     for _ in range(10): 
         #print compare_np5(mylong, myshort, num_mismatches)
         #print compare_bin8(mylong, myshort, num_mismatches)
