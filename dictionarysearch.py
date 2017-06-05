@@ -65,7 +65,7 @@ def preprocess_reference(ref_file):
                 start += CHUNK_SIZE
                 contig_counts = {c: chunkseq.count(c) for c in set(chunkseq)}
                 # Initialise a dictionary of arrays and fill them with
-                # the positions for each base in hte reference chunk.
+                # the positions for each base in the reference chunk.
                 (arrays, positions) = ({}, {})
                 for c, count in contig_counts.iteritems():
                     arrays[c] = np.empty(count, dtype='i4')
